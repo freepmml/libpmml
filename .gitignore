@@ -1,0 +1,24 @@
+*.d
+.*.swp
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Compiled Dynamic libraries
+*.so
+*.so.*
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# xsd generated
+/src/pmml-4-2.?pp
+
+# Executables
+/src/pmml-test
