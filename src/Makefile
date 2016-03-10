@@ -34,14 +34,14 @@ $(LIBNAME): pmml-4-2.o Isotonic.o
 	ln -vfsT $(LIBNAME) $(DEVLIBNAME)
 
 
-install: $(DESTDIR)/usr/lib/$(LIBNAME) $(DESTDIR)/usr/lib/$(DEVLIBNAME) $(DESTDIR)/usr/include/pmml/Isotonic.hpp
+install: $(DESTDIR)/usr/lib64/$(LIBNAME) $(DESTDIR)/usr/lib64/$(DEVLIBNAME) $(DESTDIR)/usr/include/pmml/Isotonic.hpp
 
-$(DESTDIR)/usr/lib/$(LIBNAME): $(LIBNAME)
-	install -m 755 -D $(LIBNAME) $(DESTDIR)/usr/lib/$(LIBNAME)
+$(DESTDIR)/usr/lib64/$(LIBNAME): $(LIBNAME)
+	install -m 755 -D $(LIBNAME) $@
 
 $(DESTDIR)/usr/include/pmml/Isotonic.hpp: Isotonic.hpp
-	install -m 644 -D Isotonic.hpp $(DESTDIR)/usr/include/Isotonic.hpp
+	install -m 644 -D Isotonic.hpp $@
 
-$(DESTDIR)/usr/lib/$(DEVLIBNAME):
-	ln -fsT $(LIBNAME) $(DESTDIR)/usr/lib/$(DEVLIBNAME)
+$(DESTDIR)/usr/lib64/$(DEVLIBNAME):
+	ln -fsT $(LIBNAME) $@
 
