@@ -3,13 +3,13 @@
 CXXFLAGS=-std=c++0x -O3 -ggdb -I. -fPIC
 LDFLAGS=-lxerces-c -Wl,-rpath -Wl,`pwd`
 LIBVERSION=1
-LIBNAME=libmpmml.so.$(LIBVERSION)
+LIBNAME=libpmml.so.$(LIBVERSION)
+DEVLIBNAME=$(patsubst %.so.$(LIBVERSION),%.so,$(LIBNAME))
 
 .PHONY: clean all install
 all: $(LIBNAME)
 clean:
-	rm -f *.o *.d pmml-test $(LIBNAME) $(patsubst %.so.$(LIBVERSION),%.so,$(LIBNAME)) pmml-4-2.?pp || true
-#
+	rm -f *.o *.d pmml-test $(LIBNAME) $(DEVLIBNAME) pmml-4-2.?pp || true
 
 NODEPS:=clean tags
 SOURCES:=$(shell find . -name "*.cpp" -printf "%f\n")
@@ -28,13 +28,20 @@ pmml-4-2.cpp: pmml-4-2.xsd
 
 test: $(LIBNAME)
 test: test.o
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -L. -lmpmml $^ -o $@
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -L. -lpmml $^ -o $@
 $(LIBNAME): pmml-4-2.o Isotonic.o
 	$(CXX) $(CXXFLAGS) -shared -Wl,-soname,$(LIBNAME) $^ -o $@
-	ln -vfsT $(LIBNAME) $(patsubst %.so.$(LIBVERSION),%.so,$(LIBNAME))
+	ln -vfsT $(LIBNAME) $(DEVLIBNAME)
 
-install: $(LIBNAME)
-	install -m 644 -D $(LIBNAME) $(DESTDIR)/usr/lib/$(LIBNAME)
+
+install: $(DESTDIR)/usr/lib/$(LIBNAME) $(DESTDIR)/usr/lib/$(DEVLIBNAME) $(DESTDIR)/usr/include/pmml/Isotonic.hpp
+
+$(DESTDIR)/usr/lib/$(LIBNAME): $(LIBNAME)
+	install -m 755 -D $(LIBNAME) $(DESTDIR)/usr/lib/$(LIBNAME)
+
+$(DESTDIR)/usr/include/pmml/Isotonic.hpp: Isotonic.hpp
 	install -m 644 -D Isotonic.hpp $(DESTDIR)/usr/include/Isotonic.hpp
-	ln -fsT $(LIBNAME) $(DESTDIR)/usr/lib/$(patsubst %.so.$(LIBVERSION),%.so,$(LIBNAME))
+
+$(DESTDIR)/usr/lib/$(DEVLIBNAME):
+	ln -fsT $(LIBNAME) $(DESTDIR)/usr/lib/$(DEVLIBNAME)
 

@@ -17,6 +17,9 @@
 *.la
 *.a
 
+# Tag file
+tags
+
 # xsd generated
 /src/pmml-4-2.?pp
 
